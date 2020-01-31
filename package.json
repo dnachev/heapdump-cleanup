@@ -1,6 +1,6 @@
 {
   "name": "heapdump-cleanup",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "bin": {
     "heapdump-cleanup": "./src/heapdump-cleanup.js"
