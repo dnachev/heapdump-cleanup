@@ -1,6 +1,11 @@
 {
   "name": "heapdump-cleanup",
   "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dnachev/heapdump-cleanup"
+  },
+  "license": "BSD-2-Clause",
   "type": "module",
   "bin": {
     "heapdump-cleanup": "./src/heapdump-cleanup.js"
