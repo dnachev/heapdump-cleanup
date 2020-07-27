@@ -1,7 +1,4 @@
-#!/bin/sh
-":"; //# comment; exec /usr/bin/env node --experimental-modules "$0" "$@"
-// The above hack is documented here: https://web.archive.org/web/20190629142812/http://sambal.org/2014/02/passing-options-node-shebang-line/
-
+#!/usr/bin/env node
 import minimist from "minimist";
 import { parse, stringify } from "./json-stream.js";
 import Snapshot from "./snapshot.js";
