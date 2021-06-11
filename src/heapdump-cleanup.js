@@ -47,7 +47,7 @@ function usage() {
 
 async function main() {
   const argv = minimist(process.argv.slice(2), {
-    boolean: "debug"
+    boolean: "debug",
   });
 
   if (argv._.length < 2) {
@@ -76,7 +76,7 @@ main().then(
   () => {
     console.log(`Done!`);
   },
-  err => {
+  (err) => {
     console.error(err);
     process.exit(1);
   }

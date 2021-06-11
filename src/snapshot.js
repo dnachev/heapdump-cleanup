@@ -3,7 +3,7 @@ const NODE_OFFSETS = {
   type: 0,
   name: 1,
   id: 2,
-  edge_count: 4
+  edge_count: 4,
 };
 
 export default class Snapshot {
@@ -43,9 +43,10 @@ export default class Snapshot {
 
   isNodeObjectTypeEqual(expectedName, nodeIndex) {
     // if the node represents an object, its name will be the type (constructor name really)
-    const type = this.nodeTypes[NODE_OFFSETS.type][
-      this.nodes[nodeIndex + NODE_OFFSETS.type]
-    ];
+    const type =
+      this.nodeTypes[NODE_OFFSETS.type][
+        this.nodes[nodeIndex + NODE_OFFSETS.type]
+      ];
     if (type !== "object") {
       return false;
     }

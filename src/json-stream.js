@@ -4,12 +4,12 @@ import Chain from "stream-chain";
 import fs from "fs";
 
 export function parse(inputFile) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const chain = new Chain([fs.createReadStream(inputFile), parser()]);
 
     const asm = Asm.connectTo(chain);
 
-    asm.on("done", asm => resolve(asm.current));
+    asm.on("done", (asm) => resolve(asm.current));
   });
 }
 
@@ -22,7 +22,7 @@ export async function stringify(jsonValue, outputFile) {
   await writeJsonValue(jsonValue, outputStream);
 
   return new Promise((resolve, reject) => {
-    outputStream.on("error", err => reject(err));
+    outputStream.on("error", (err) => reject(err));
     outputStream.end(() => resolve());
   });
 }
@@ -78,7 +78,7 @@ async function writeJsonObject(obj, stream) {
 }
 
 function streamReady(stream) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     stream.once("drain", resolve);
   });
 }
