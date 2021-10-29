@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "module": "ESNEXT",
+        "target": "ESNEXT",
+        "moduleResolution": "node"
+    },
+    "files": ["src/types.d.ts", "src/heapdump-cleanup.js"]
+}

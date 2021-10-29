@@ -1,18 +1,23 @@
 #!/usr/bin/env node
-import minimist from "minimist";
-import { parse, stringify } from "./json-stream.js";
-import Snapshot from "./snapshot.js";
+import minimist from 'minimist';
+import Snapshot from './snapshot.js';
 
+/**
+ * @param {Snapshot} snapshot
+ * @param {object} options
+ * @param {boolean} options.debug
+ */
 function processSnapshot(snapshot, { debug }) {
   let nextEdgeIndex = 0;
   let totalObjects = 0;
   let weakMaps = 0;
-  snapshot.traverseNodes((type, name, id, _, ownedEdgeCount, __, nodeIndex) => {
+  snapshot.traverseNodes((fields, nodeIndex) => {
     const start = nextEdgeIndex;
+    const ownedEdgeCount = fields[snapshot.nodeOffsets.edge_count];
     // TODO this requires the callback to understand how the heapsnapshots are structured
     nextEdgeIndex = nextEdgeIndex + ownedEdgeCount * snapshot.edgeFieldsCount;
     totalObjects++;
-    if (!snapshot.isNodeObjectTypeEqual("WeakMap", nodeIndex)) {
+    if (!snapshot.isNodeObjectTypeEqual('WeakMap', nodeIndex)) {
       return;
     }
     if (debug) {
@@ -22,7 +27,7 @@ function processSnapshot(snapshot, { debug }) {
     weakMaps++;
 
     snapshot.traverseEdges(
-      (type, name, toNode, edgeIndex) => {
+      (_fields, edgeIndex) => {
         snapshot.skipEdge(nodeIndex, edgeIndex);
       },
       start,
@@ -30,9 +35,7 @@ function processSnapshot(snapshot, { debug }) {
     );
   });
 
-  console.log(
-    `Found WeakMap objects: ${weakMaps} of ${totalObjects} total traversed.`
-  );
+  console.log(`Found WeakMap objects: ${weakMaps} of ${totalObjects} total traversed.`);
 }
 
 function usage() {
@@ -47,7 +50,7 @@ function usage() {
 
 async function main() {
   const argv = minimist(process.argv.slice(2), {
-    boolean: "debug",
+    boolean: 'debug',
   });
 
   if (argv._.length < 2) {
@@ -61,15 +64,15 @@ async function main() {
 
   console.log(`Loading ${input}...`);
 
-  const snapshot = await parse(input);
+  const snapshot = await Snapshot.parse(input, { debug });
 
   console.log(`Processing the snapshot...`);
 
-  processSnapshot(new Snapshot(snapshot, { debug }), { debug });
+  processSnapshot(snapshot, { debug });
 
   console.log(`Writing snapshot to ${output}...`);
 
-  await stringify(snapshot, output);
+  await snapshot.save(output);
 }
 
 main().then(
@@ -77,7 +80,7 @@ main().then(
     console.log(`Done!`);
   },
   (err) => {
-    console.error(err);
-    process.exit(1);
+    console.error('%O', err);
+    process.exitCode = 1;
   }
 );
